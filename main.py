@@ -350,7 +350,14 @@ async def compare_files(
                             cell.fill = orange_fill
                         elif match_status == "No Match":
                             cell.fill = red_fill
-
+          # Auto-fit columns
+        for col in ws.columns:
+            max_length = 0
+            for cell in col:
+                if cell.value:
+                    max_length = max(max_length, len(str(cell.value)))
+            ws.column_dimensions[col[0].column_letter].width = max_length + 2
+            
         # Save result to a temporary file
         with tempfile.NamedTemporaryFile(delete=False, suffix=".xlsx") as tmp_file:
             wb.save(tmp_file.name)
